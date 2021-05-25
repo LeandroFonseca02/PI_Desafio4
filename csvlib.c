@@ -1,7 +1,6 @@
 #include "csvlib.h"
 
 
-
 int getNumberOfLines(char *chrFile)
 {
     int intNumLines = 0;
@@ -17,7 +16,7 @@ int getNumberOfLines(char *chrFile)
     }
 
     fclose(fp);
-    return intNumLines;
+    return intNumLines+1;
 }
 
 int getNumberOfWords(char *chrFile, char separador)
@@ -34,7 +33,7 @@ int getNumberOfWords(char *chrFile, char separador)
         }
     }
     fclose(fp);
-    return intNumWords;
+    return intNumWords+1;
 }
 
 int getNumberOfFieldsPerLine(char *chrFile, char separador)
@@ -72,7 +71,7 @@ char *changeFile(char *chrFile){
             fclose(fp);
             return *chrFile;
         }else{
-            printf(CHANGEFILE_ERROR);
+            printf(CHANGEFILE_ERROR,chrFile);
         }
     }
 
@@ -101,9 +100,6 @@ void readFile(char *chrFile){
     }
     printf("\n");
 
-    printf("\nPrima Enter para continuar");
-    clsKeyboardBuffer();
-    getchar();
 }
 
 void getInfoFile(char *chrFile, char chrSeparador){
@@ -120,6 +116,91 @@ void getInfoFile(char *chrFile, char chrSeparador){
     printf(FILE_INFO_LINES, chrFile, intNumLines);
     printf(FILE_INFO_WORDS, chrFile, intNumWords);
 
-    clsKeyboardBuffer();
-    getchar();
+}
+
+void insertionSort(struct linha *pArray, int intNumLines, int intNumField){
+    int i = 0, j = 0,k = 0;
+    struct linha temp;
+    intNumField--;
+
+    for(i = 0; i < intNumLines-1; i++)
+    {
+
+        for(j = i + 1; j < intNumLines; j++)
+        {
+            if(strcmp(pArray[i].chrLinha[intNumField],pArray[j].chrLinha[intNumField])>0)
+            {
+                temp = pArray[i];
+                pArray[i] = pArray[j];
+                pArray[j] = temp;
+            }
+        }
+    }
+
+}
+
+
+void sortFile(char *chrFile, char chrSeparador){
+    int intNumLines = 0, intNumFields = 0, intCounter = 0, intCounterLines=0,intCounterCol=0, intFieldChoice = 1;
+    char chrInput = '\0';
+    FILE *fp = NULL;
+
+    intNumLines = getNumberOfLines(chrFile);
+
+    struct linha chrLinhas[intNumLines];
+
+
+    fp = fopen(chrFile, "r");
+
+    for(chrInput = fgetc(fp); chrInput != EOF; chrInput = fgetc(fp)){
+        if (chrInput == chrSeparador){
+            chrLinhas[intCounterLines].chrLinha[intCounterCol][intCounter] = '\0';
+            intCounterCol++;
+            intCounter = 0;
+        }else if (chrInput == '\n'){
+            chrLinhas[intCounterLines].chrLinha[intCounterCol][intCounter] = '\0';
+            intCounterLines++;
+            intCounterCol = 0;
+            intCounter = 0;
+        }else{
+            chrLinhas[intCounterLines].chrLinha[intCounterCol][intCounter] = chrInput;
+            intCounter++;
+        }
+    }
+    chrLinhas[intCounterLines].chrLinha[intCounterCol][intCounter] = '\0';
+    fclose(fp);
+
+    intNumFields = getNumberOfFieldsPerLine(chrFile, chrSeparador);
+    printf(SORT_FILE_BY_FIELD,intNumFields);
+    scanf("%d", &intFieldChoice);
+
+    if((intFieldChoice > 1) || (intFieldChoice < intNumFields)){
+        insertionSort(chrLinhas, intNumLines,intFieldChoice);
+
+        fp = fopen(chrFile, "w");
+
+        for(intCounterLines = 0; intCounterLines < intNumLines; intCounterLines++){
+            for(intCounterCol = 0; intCounterCol < intNumFields; intCounterCol++){
+                fprintf(fp,"%s",chrLinhas[intCounterLines].chrLinha[intCounterCol]);
+                if(intCounterCol != intNumFields-1){
+                    fprintf(fp,"%c",chrSeparador);
+                }
+            }
+            if(intCounterLines != intNumLines-1){
+                fprintf(fp,"\n");
+            }
+
+        }
+        fclose(fp);
+
+        printf(SORT_FILE_SUCESS,intFieldChoice);
+
+    }else {
+        printf("\n\nOpcao invalida.");
+    }
+
+
+
+
+
 }

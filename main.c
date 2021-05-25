@@ -19,29 +19,34 @@ int main()
         switch (chrMenuOption) {
             case '1':
                 readFile(chrFile);
+                returnMenu();
                 break;
             case '2':
                 getInfoFile(chrFile, chrSeparador);
+                returnMenu();
                 break;
             case '3':
+                sortFile(chrFile, chrSeparador);
+                returnMenu();
                 break;
             case '4':
                 *chrFile = changeFile(chrFile);
+                returnMenu();
                 break;
             case '5':
                 chrSeparador = changeSeparator(chrSeparador);
+                returnMenu();
                 break;
             case '6':
-                break;
-            case '7':
                 sobrePrograma();
+                returnMenu();
                 break;
             case '0':
                 intExit = 1;
                 break;
             default:
                 printf("Opção invalida!");
-                getchar();
+                returnMenu();
                 break;
         }
     }

@@ -10,8 +10,7 @@
 #define MAINMENU_OPTION_3 "\t\t\t[3] Ordenar ficheiro %s\n"
 #define MAINMENU_OPTION_4 "\t\t\t[4] Alterar ficheiro .csv\n"
 #define MAINMENU_OPTION_5 "\t\t\t[5] Alterar separador de palavras\n"
-#define MAINMENU_OPTION_6 "\t\t\t[6] Salvar alterações no ficheiro %s\n"
-#define MAINMENU_OPTION_7 "\t\t\t[7] Sobre o programa\n"
+#define MAINMENU_OPTION_6 "\t\t\t[6] Sobre o programa\n"
 #define MAINMENU_OPTION_0 "\t\t\t[0] Sair do programa\n"
 #define MAINMENU_USER_OPTION "\n\t\t\tDigite a opção que deseja: "
 
@@ -26,7 +25,8 @@
 #define FILE_INFO_LINES "O ficheiro %s tem %d linhas.\n"
 #define FILE_INFO_WORDS "O ficheiro %s tem %d palavras.\n"
 
-
+#define SORT_FILE_BY_FIELD "\nDigite o campo que deseja ordenar (1-%d): "
+#define SORT_FILE_SUCESS "\n\nFicheiro ordenado pelo campo %d."
 
 
 void clearString(char *chrArray);
@@ -37,3 +37,5 @@ void sobrePrograma();
 
 //Limpa o buffer do teclado
 void clsKeyboardBuffer(void);
+
+void returnMenu();
